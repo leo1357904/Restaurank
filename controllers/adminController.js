@@ -1,7 +1,7 @@
 const imgur = require('imgur-node-api');
 const db = require('../models');
 
-const { Restaurant } = db;
+const { Restaurant, User } = db;
 const IMGUR_CLIENT_ID = 'cc4db0da4aafde9';
 
 const adminController = {
@@ -122,6 +122,19 @@ const adminController = {
             res.redirect('/admin/restaurants');
           });
       });
+  },
+
+  editUsers: async (req, res) => {
+    const users = await User.findAll();
+    res.render('admin/users', { users });
+  },
+
+  putUsers: async (req, res) => {
+    const user = await User.findByPk(req.params.userId);
+    const role = user.isAmin ? 'User' : 'Admin';
+    await user.update({ isAdmin: !user.isAdmin ? 1 : 0 });
+    req.flash('success_messages', `Set ${user.name}(id:${user.id}) to ${role}`);
+    res.redirect('/admin/users');
   },
 };
 
