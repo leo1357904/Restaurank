@@ -10,6 +10,7 @@ module.exports = {
       password: bcrypt.hashSync('12345678', bcrypt.genSaltSync(10), null),
       isAdmin: 1,
       name: 'root',
+      image: 'https://i.imgur.com/Uzs2ty3.jpg',
       createdAt: new Date(),
       updatedAt: new Date(),
     }, {
@@ -17,6 +18,7 @@ module.exports = {
       password: bcrypt.hashSync('12345678', bcrypt.genSaltSync(10), null),
       isAdmin: 0,
       name: 'user1',
+      image: 'https://i.imgur.com/Uzs2ty3.jpg',
       createdAt: new Date(),
       updatedAt: new Date(),
     }, {
@@ -24,6 +26,7 @@ module.exports = {
       password: bcrypt.hashSync('12345678', bcrypt.genSaltSync(10), null),
       isAdmin: 0,
       name: 'user2',
+      image: 'https://i.imgur.com/Uzs2ty3.jpg',
       createdAt: new Date(),
       updatedAt: new Date(),
     }, {
@@ -31,6 +34,7 @@ module.exports = {
       password: bcrypt.hashSync('0000', bcrypt.genSaltSync(10), null),
       isAdmin: 1,
       name: 'admin',
+      image: 'https://i.imgur.com/Uzs2ty3.jpg',
       createdAt: new Date(),
       updatedAt: new Date(),
     }, {
@@ -38,6 +42,7 @@ module.exports = {
       password: bcrypt.hashSync('0000', bcrypt.genSaltSync(10), null),
       isAdmin: 0,
       name: 'user',
+      image: 'https://i.imgur.com/Uzs2ty3.jpg',
       createdAt: new Date(),
       updatedAt: new Date(),
     }], {});
