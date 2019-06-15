@@ -1,0 +1,19 @@
+{{!-- 前端的部分真的很缺乏，對齊之類的方法還必須用&emsp;這種方法，
+      不知道助教是否知道什麼網路上能夠練習前端的教材能夠讓我進修？ --}}
+<div class="card flex-row flex-wrap">
+  <div class="card-header border-0">
+    <img class="card-img-left" src="{{profile.image}}" alt="Card image cap" width="286px" height="286px">
+  </div>
+  <div class="card-block px-2">
+    </br>
+    </br>
+    <h4 class="card-text">&emsp;&emsp;{{profile.name}}</h4>
+    <p class="card-text">&emsp;&emsp;{{profile.email}}</p>
+  </div>
+  <div class="w-100"></div>
+  <div class="card-footer w-100 text-muted">
+  {{#if canEdit}}
+    <a href="/users/{{profile.id}}/edit" class="btn btn-primary">Edit</a>
+  {{/if}}
+  </div>
+</div>

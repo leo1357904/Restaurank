@@ -5,7 +5,8 @@ module.exports = (sequelize, DataTypes) => {
     name: DataTypes.STRING,
     email: DataTypes.STRING,
     password: DataTypes.STRING,
-    isAdmin: DataTypes.BOOLEAN,
+    isAdmin: DataTypes.INTEGER,
+    image: DataTypes.STRING,
   }, {});
   User.associate = function (models) { // eslint-disable-line
     // associations can be defined here
