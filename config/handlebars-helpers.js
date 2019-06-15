@@ -1,7 +1,7 @@
 const moment = require('moment');
 
 module.exports = {
-  ifCond: (a, b, options) => {
+  ifCond: function(a, b, options) { // eslint-disable-line
     if (a === b) {
       return options.fn(this);
     }
