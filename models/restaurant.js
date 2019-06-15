@@ -11,6 +11,8 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
   Restaurant.associate = function (models) { // eslint-disable-line
     // associations can be defined here
+    Restaurant.belongsTo(models.Category);
+    Restaurant.hasMany(models.Comment);
   };
   return Restaurant;
 };

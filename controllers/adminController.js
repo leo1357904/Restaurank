@@ -1,19 +1,20 @@
 const imgur = require('imgur-node-api');
 const db = require('../models');
 
-const { Restaurant, User } = db;
+const { Restaurant, User, Category } = db;
 const IMGUR_CLIENT_ID = 'cc4db0da4aafde9';
 
 const adminController = {
   getRestaurants: (req, res) => {
-    Restaurant.findAll()
+    Restaurant.findAll({ include: [Category] })
       .then((restaurants) => {
         res.render('admin/restaurants', { restaurants });
       });
   },
 
-  createRestaurant: (req, res) => {
-    res.render('admin/create');
+  createRestaurant: async (req, res) => {
+    const categories = await Category.findAll();
+    res.render('admin/create', { categories });
   },
 
   postRestaurant: (req, res) => { //eslint-disable-line
@@ -32,7 +33,9 @@ const adminController = {
           address: req.body.address,
           opening_hours: req.body.opening_hours,
           description: req.body.description,
-          image: file ? img.data.link : null,
+          image: img.data.link, //
+          // image: file ? img.data.link : null,
+          CategoryId: req.body.categoryId,
         }).then(() => {
           req.flash('success_messages', 'restaurant was successfully created');
           return res.redirect('/admin/restaurants');
@@ -46,6 +49,7 @@ const adminController = {
         opening_hours: req.body.opening_hours,
         description: req.body.description,
         image: null,
+        CategoryId: req.body.categoryId,
       }).then(() => {
         req.flash('success_messages', 'restaurant was successfully created');
         return res.redirect('/admin/restaurants');
@@ -55,14 +59,14 @@ const adminController = {
 
   getRestaurant: (req, res) => {
     Restaurant
-      .findByPk(req.params.id)
-      .then(restaurant => res.render('admin/restaurant', { restaurant }));
+      .findByPk(req.params.restaurantId, { include: [Category] })
+      .then(restaurant => res.render('restaurant', { restaurant }));
   },
 
-  editRestaurant: (req, res) => {
-    Restaurant
-      .findByPk(req.params.id)
-      .then(restaurant => res.render('admin/create', { restaurant }));
+  editRestaurant: async (req, res) => {
+    const restaurant = await Restaurant.findByPk(req.params.restaurantId);
+    const categories = await Category.findAll();
+    res.render('admin/create', { categories, restaurant });
   },
 
   putRestaurant: (req, res) => { //eslint-disable-line
@@ -75,7 +79,7 @@ const adminController = {
     if (file) {
       imgur.setClientID(IMGUR_CLIENT_ID);
       imgur.upload(file.path, (err, img) => { // eslint-disable-line
-        return Restaurant.findByPk(req.params.id)
+        return Restaurant.findByPk(req.params.restaurantId)
           .then((restaurant) => {
             restaurant
               .update({
@@ -84,7 +88,9 @@ const adminController = {
                 address: req.body.address,
                 opening_hours: req.body.opening_hours,
                 description: req.body.description,
-                image: file ? img.data.link : restaurant.image,
+                image: img.data.link, //
+                // image: file ? img.data.link : restaurant.image,
+                CategoryId: req.body.categoryId,
               })
               .then(() => {
                 req.flash('success_messages', 'restaurant was successfully to update');
@@ -93,7 +99,7 @@ const adminController = {
           });
       });
     } else {
-      return Restaurant.findByPk(req.params.id)
+      return Restaurant.findByPk(req.params.restaurantId)
         .then((restaurant) => {
           restaurant
             .update({
@@ -103,6 +109,7 @@ const adminController = {
               opening_hours: req.body.opening_hours,
               description: req.body.description,
               image: restaurant.image,
+              CategoryId: req.body.categoryId,
             })
             .then(() => {
               req.flash('success_messages', 'restaurant was successfully to update');
@@ -114,7 +121,7 @@ const adminController = {
 
   deleteRestaurant: (req, res) => {
     Restaurant
-      .findByPk(req.params.id)
+      .findByPk(req.params.restaurantId)
       .then((restaurant) => {
         restaurant
           .destroy()

@@ -9,6 +9,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
   User.associate = function (models) { // eslint-disable-line
     // associations can be defined here
+    User.hasMany(models.Comment);
   };
   return User;
 };

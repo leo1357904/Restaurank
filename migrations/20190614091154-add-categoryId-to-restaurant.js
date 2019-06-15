@@ -1,7 +1,7 @@
-'use strict'; // eslint-disable-line
+'use strict'; //eslint-disable-line
 
 module.exports = {
-  up: (queryInterface, Sequelize) => { // eslint-disable-line
+  up: (queryInterface, Sequelize) => { //eslint-disable-line
     /*
       Add altering commands here.
       Return a promise to correctly handle asynchronicity.
@@ -9,13 +9,17 @@ module.exports = {
       Example:
       return queryInterface.createTable('users', { id: Sequelize.INTEGER });
     */
-    return queryInterface.addColumn('Users', 'isAdmin', {
+    return queryInterface.addColumn('Restaurants', 'CategoryId', {
       type: Sequelize.INTEGER,
-      defaultValue: 0,
+      allowNull: false,
+      reference: {
+        model: 'Categories',
+        key: 'id',
+      },
     });
   },
 
-  down: (queryInterface, Sequelize) => { // eslint-disable-line
+  down: (queryInterface, Sequelize) => { //eslint-disable-line
     /*
       Add reverting commands here.
       Return a promise to correctly handle asynchronicity.
@@ -23,6 +27,6 @@ module.exports = {
       Example:
       return queryInterface.dropTable('users');
     */
-    return queryInterface.removeColumn('Users', 'isAdmin');
+    return queryInterface.removeColumn('Restaurants', 'CategoryId');
   },
 };
