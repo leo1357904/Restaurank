@@ -1,8 +1,9 @@
 const bcrypt = require('bcrypt-nodejs');
 const imgur = require('imgur-node-api');
+const uniqBy = require('lodash.uniqby');
 const db = require('../models');
 
-const { User } = db;
+const { User, Comment, Restaurant } = db;
 const IMGUR_CLIENT_ID = 'cc4db0da4aafde9';
 
 const userController = {
@@ -53,11 +54,30 @@ const userController = {
 
   getUser: async (req, res) => {
     const { userId } = req.params;
-    const profile = await User.findByPk(userId);
 
+    const profile = await User.findByPk(
+      userId,
+      {
+        include: {
+          model: Comment,
+          include: Restaurant,
+        },
+      },
+    );
+
+    const commentCount = profile.Comments.length;
+    const restaurantCount = uniqBy(profile.Comments, 'Restaurant.id').length;
     const canEdit = Number(req.params.userId) === req.user.id;
 
-    return res.render('profile', { profile, canEdit });
+    return res.render(
+      'profile',
+      {
+        profile,
+        canEdit,
+        commentCount,
+        restaurantCount,
+      },
+    );
   },
 
   editUser: async (req, res) => {

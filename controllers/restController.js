@@ -25,6 +25,7 @@ const restController = {
     const result = await Restaurant.findAndCountAll({
       include: Category,
       where: whereQuery,
+      order: [['id', 'ASC']],
       offset,
       limit: pageLimit,
     });

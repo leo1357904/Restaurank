@@ -27,9 +27,15 @@
     </form>
   {{/if}}
   <blockquote class="blockquote mb-0">
-    <h4><a href="/users/{{this.User.id}}">{{this.User.name}}</a></h4>
-    <p>{{this.text}}</p>
-    <footer class="blockquote-footer">{{moment this.createdAt}}</footer>
+    <div class="media">
+        <img src="{{this.User.image}}" class="align-self-start mr-3" alt="..." width="100em" height="100em">
+        <div class="media-body">
+          <h4><a href="/users/{{this.User.id}}">{{this.User.name}}</a></h4>
+          <p>{{this.text}}</p>
+          <small>－{{moment this.createdAt}}</small>
+      </div>
+    </div>
+    {{!-- <footer class="blockquote-footer">{{moment this.createdAt}}</footer> --}}
   </blockquote>
   <hr />
 {{/each}}

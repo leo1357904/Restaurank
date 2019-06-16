@@ -17,3 +17,21 @@
   {{/if}}
   </div>
 </div>
+<div class="card my-5 w-100">
+  <div class="card-header">
+    已撰寫 {{commentCount}} 則評論，評論過 {{restaurantCount}} 間餐廳
+  </div>
+  <div class="list-group">
+    {{#each profile.Comments}}
+    <a href="/restaurants/{{this.Restaurant.id}}" class="list-group-item list-group-item-action">
+      <div class="media">
+        <img src="{{this.Restaurant.image}}" class="align-self-start mr-3" alt="..." width="100em" height="100em">
+        <div class="media-body">
+            <p>{{this.text}}</p>
+            <small>{{this.Restaurant.name}} 餐廳 －{{moment this.createdAt}}</small>
+        </div>
+      </div>
+    </a>
+    {{/each}}
+  </div>
+</div>
