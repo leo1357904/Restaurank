@@ -69,6 +69,24 @@ const restController = {
     );
     return res.render('restaurant', { restaurant });
   },
+
+  getFeeds: async (req, res) => {
+    const restaurants = await Restaurant.findAll({
+      limit: 10,
+      order: [['createdAt', 'DESC']],
+      include: [Category],
+    });
+
+    const comments = await Comment.findAll({
+      limit: 10,
+      order: [['createdAt', 'DESC']],
+      include: [User, Restaurant],
+    });
+    return res.render('feeds', {
+      restaurants,
+      comments,
+    });
+  },
 };
 
 module.exports = restController;
