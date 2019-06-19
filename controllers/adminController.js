@@ -36,6 +36,7 @@ const adminController = {
           image: img.data.link, //
           // image: file ? img.data.link : null,
           CategoryId: req.body.categoryId,
+          viewCounts: 0,
         }).then(() => {
           req.flash('success_messages', 'restaurant was successfully created');
           return res.redirect('/admin/restaurants');
@@ -50,6 +51,7 @@ const adminController = {
         description: req.body.description,
         image: null,
         CategoryId: req.body.categoryId,
+        viewCounts: 0,
       }).then(() => {
         req.flash('success_messages', 'restaurant was successfully created');
         return res.redirect('/admin/restaurants');

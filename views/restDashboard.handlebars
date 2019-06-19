@@ -8,11 +8,12 @@
     <div class="well">
       <ul class="list-unstyled">
         <li><strong> - 評論數:</strong> {{commentCount}}</li>
-        <li><strong> - 瀏覽次數:</strong></li>
+        <li><strong> - 瀏覽次數:</strong>{{restaurant.viewCounts}}</li>
         <li><strong> - 收藏數:</strong></li>
       </ul>
     </div>
     </br>
-    <a href="javascript:history.back()">回上一頁</a>
+    <a href="/restaurants/{{restaurant.id}}">回上一頁</a>
+    {{!-- <a href="javascript:history.back()">回上一頁</a> --}}
   </div>
 </div>

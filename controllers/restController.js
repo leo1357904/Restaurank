@@ -67,6 +67,7 @@ const restController = {
         ],
       },
     );
+    await restaurant.update({ viewCounts: restaurant.viewCounts + 1 });
     return res.render('restaurant', { restaurant });
   },
 
