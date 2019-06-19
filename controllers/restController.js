@@ -87,6 +87,24 @@ const restController = {
       comments,
     });
   },
+
+  getRestaurantDashboard: async (req, res) => {
+    const { restaurantId } = req.params;
+
+    const restaurant = await Restaurant.findByPk(
+      restaurantId,
+      {
+        include: [
+          Category,
+          Comment,
+        ],
+      },
+    );
+
+    const commentCount = restaurant.Comments.length;
+
+    return res.render('restDashboard', { restaurant, commentCount });
+  },
 };
 
 module.exports = restController;

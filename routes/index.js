@@ -35,6 +35,7 @@ module.exports = (app, passport) => {
   app.get('/restaurants', authenticated, restController.getRestaurants);
   app.get('/restaurants/feeds', authenticated, restController.getFeeds);
   app.get('/restaurants/:restaurantId', authenticated, restController.getRestaurant);
+  app.get('/restaurants/:restaurantId/dashboard', authenticated, restController.getRestaurantDashboard);
 
   app.post('/comments', authenticated, commentController.postComment);
   app.delete('/comments/:id', authenticatedAdmin, commentController.deleteComment);
