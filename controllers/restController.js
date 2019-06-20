@@ -33,6 +33,7 @@ const restController = {
     const data = result.rows.map(r => ({
       ...r.dataValues,
       description: r.dataValues.description.substring(0, 50),
+      isFavorited: req.user.FavoritedRestaurants.map(d => d.id).includes(r.id),
     }));
 
     // data for pagination
@@ -63,12 +64,15 @@ const restController = {
       {
         include: [
           Category,
+          { model: User, as: 'FavoritedUsers' },
           { model: Comment, include: [User] },
         ],
       },
     );
     await restaurant.update({ viewCounts: restaurant.viewCounts + 1 });
-    return res.render('restaurant', { restaurant });
+
+    const isFavorited = restaurant.FavoritedUsers.map(d => d.id).includes(req.user.id);
+    return res.render('restaurant', { restaurant, isFavorited });
   },
 
   getFeeds: async (req, res) => {

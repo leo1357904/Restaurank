@@ -3,7 +3,12 @@ const imgur = require('imgur-node-api');
 const uniqBy = require('lodash.uniqby');
 const db = require('../models');
 
-const { User, Comment, Restaurant } = db;
+const {
+  User,
+  Comment,
+  Restaurant,
+  Favorite,
+} = db;
 const IMGUR_CLIENT_ID = 'cc4db0da4aafde9';
 
 const userController = {
@@ -117,6 +122,27 @@ const userController = {
     });
     req.flash('success_messages', 'User Profile is successfully updated');
     return res.redirect(`/users/${id}`);
+  },
+
+  addFavorite: async (req, res) => {
+    await Favorite.create({
+      UserId: req.user.id,
+      RestaurantId: req.params.restaurantId,
+    });
+    return res.redirect('back');
+  },
+
+  removeFavorite: async (req, res) => {
+    const favorite = await Favorite.findOne(
+      {
+        where: {
+          UserId: req.user.id,
+          RestaurantId: req.params.restaurantId,
+        },
+      },
+    );
+    await favorite.destroy();
+    return res.redirect('back');
   },
 };
 
