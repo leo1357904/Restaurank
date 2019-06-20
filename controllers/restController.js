@@ -34,6 +34,7 @@ const restController = {
       ...r.dataValues,
       description: r.dataValues.description.substring(0, 50),
       isFavorited: req.user.FavoritedRestaurants.map(d => d.id).includes(r.id),
+      isLiked: req.user.LikedRestaurants.map(d => d.id).includes(r.id),
     }));
 
     // data for pagination
@@ -65,6 +66,7 @@ const restController = {
         include: [
           Category,
           { model: User, as: 'FavoritedUsers' },
+          { model: User, as: 'LikedUsers' },
           { model: Comment, include: [User] },
         ],
       },
@@ -72,7 +74,8 @@ const restController = {
     await restaurant.update({ viewCounts: restaurant.viewCounts + 1 });
 
     const isFavorited = restaurant.FavoritedUsers.map(d => d.id).includes(req.user.id);
-    return res.render('restaurant', { restaurant, isFavorited });
+    const isLiked = restaurant.LikedUsers.map(d => d.id).includes(req.user.id);
+    return res.render('restaurant', { restaurant, isFavorited, isLiked });
   },
 
   getFeeds: async (req, res) => {

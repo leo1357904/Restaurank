@@ -34,6 +34,7 @@ passport.deserializeUser(async (id, cb) => {
     {
       include: [
         { model: Restaurant, as: 'FavoritedRestaurants' },
+        { model: Restaurant, as: 'LikedRestaurants' },
       ],
     },
   );

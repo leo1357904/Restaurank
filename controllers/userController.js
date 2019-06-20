@@ -8,6 +8,7 @@ const {
   Comment,
   Restaurant,
   Favorite,
+  Like,
 } = db;
 const IMGUR_CLIENT_ID = 'cc4db0da4aafde9';
 
@@ -144,6 +145,28 @@ const userController = {
     await favorite.destroy();
     return res.redirect('back');
   },
+
+  addLike: async (req, res) => {
+    await Like.create({
+      UserId: req.user.id,
+      RestaurantId: req.params.restaurantId,
+    });
+    return res.redirect('back');
+  },
+
+  removeLike: async (req, res) => {
+    const like = await Like.findOne(
+      {
+        where: {
+          UserId: req.user.id,
+          RestaurantId: req.params.restaurantId,
+        },
+      },
+    );
+    await like.destroy();
+    return res.redirect('back');
+  },
+
 };
 
 module.exports = userController;
