@@ -9,6 +9,7 @@ const {
   Restaurant,
   Favorite,
   Like,
+  Followship,
 } = db;
 const IMGUR_CLIENT_ID = 'cc4db0da4aafde9';
 
@@ -167,6 +168,47 @@ const userController = {
     return res.redirect('back');
   },
 
+  getTopUser: async (req, res) => {
+    // 撈出所有 User 與 followers 資料
+    const usersData = await User.findAll({
+      include: [
+        { model: User, as: 'Followers' },
+      ],
+    });
+    // 整理 users 資料
+    const users = usersData
+      .map(user => ({
+        ...user.dataValues,
+        // 計算追蹤者人數
+        FollowerCount: user.Followers.length,
+        // 判斷目前登入使用者是否已追蹤該 User 物件
+        isFollowed: req.user.Followings.map(d => d.id).includes(user.id),
+      }))
+      // 依追蹤者人數排序清單
+      .sort((a, b) => b.FollowerCount - a.FollowerCount);
+    return res.render('topUser', { users });
+  },
+
+  addFollowing: async (req, res) => {
+    await Followship.create({
+      followerId: req.user.id,
+      followingId: req.params.userId,
+    });
+    return res.redirect('back');
+  },
+
+  removeFollowing: async (req, res) => {
+    const followship = await Followship.findOne(
+      {
+        where: {
+          followerId: req.user.id,
+          followingId: req.params.userId,
+        },
+      },
+    );
+    await followship.destroy();
+    return res.redirect('back');
+  },
 };
 
 module.exports = userController;
