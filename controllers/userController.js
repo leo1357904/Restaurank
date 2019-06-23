@@ -65,17 +65,22 @@ const userController = {
     const profile = await User.findByPk(
       userId,
       {
-        include: {
-          model: Comment,
-          include: Restaurant,
-        },
+        include: [
+          { model: Comment, include: Restaurant },
+          { model: User, as: 'Followers' },
+          { model: User, as: 'Followings' },
+          { model: Restaurant, as: 'FavoritedRestaurants' },
+        ],
       },
     );
 
     const commentCount = profile.Comments.length;
     const restaurantCount = uniqBy(profile.Comments, 'Restaurant.id').length;
+    const followingCount = profile.Followings.length;
+    const followerCount = profile.Followers.length;
+    const favoritedCount = profile.FavoritedRestaurants.length;
     const canEdit = Number(req.params.userId) === req.user.id;
-
+    const isFollowed = profile.Followers.map(f => f.id).includes(req.user.id);
     return res.render(
       'profile',
       {
@@ -83,6 +88,10 @@ const userController = {
         canEdit,
         commentCount,
         restaurantCount,
+        favoritedCount,
+        followingCount,
+        followerCount,
+        isFollowed,
       },
     );
   },

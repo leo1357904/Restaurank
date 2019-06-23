@@ -9,29 +9,95 @@
     </br>
     <h4 class="card-text">&emsp;&emsp;{{profile.name}}</h4>
     <p class="card-text">&emsp;&emsp;{{profile.email}}</p>
-  </div>
-  <div class="w-100"></div>
-  <div class="card-footer w-100 text-muted">
-  {{#if canEdit}}
-    <a href="/users/{{profile.id}}/edit" class="btn btn-primary">Edit</a>
-  {{/if}}
+    <ul style="list-style-type: none; padding:0px">
+      <li>{{commentCount}} 則撰寫評論</li>
+      <li>{{favoritedCount}} 家收藏餐廳</li>
+      <li>{{followerCount}} 位粉絲</li>
+      <li>{{followingCount}} 位追蹤對象</li>
+    </ul>
+    {{#if canEdit}}
+      <a href="/users/{{profile.id}}/edit" class="btn btn-primary">Edit</a>
+    {{else}}
+      {{#if isFollowed}}
+      <form action="/following/{{profile.id}}?_method=DELETE" method="POST" style="display: contents;">
+        <input type="text" name="followerId" class="d-none" value="{{user.id}}">
+        <input type="text" name="followingId" class="d-none" value="{{profile.id}}">
+        <button type="submit" class="btn btn-danger">取消追蹤</button></form>
+      {{else}}
+      <form action="/following/{{profile.id}}" method="POST" style="display: contents;">
+        <input type="text" name="followerId" class="d-none" value="{{user.id}}">
+        <input type="text" name="followingId" class="d-none" value="{{profile.id}}">
+        <button type="submit" class="btn btn-primary">追蹤</button></form>
+      {{/if}}
+    {{/if}}
   </div>
 </div>
-<div class="card my-5 w-100">
-  <div class="card-header">
-    已撰寫 {{commentCount}} 則評論，評論過 {{restaurantCount}} 間餐廳
-  </div>
-  <div class="list-group">
-    {{#each profile.Comments}}
-    <a href="/restaurants/{{this.Restaurant.id}}" class="list-group-item list-group-item-action">
-      <div class="media">
-        <img src="{{this.Restaurant.image}}" class="align-self-start mr-3" alt="..." width="100em" height="100em">
-        <div class="media-body">
-            <p>{{this.text}}</p>
-            <small>{{this.Restaurant.name}} 餐廳 －{{moment this.createdAt}}</small>
-        </div>
+<div class="row">
+  <div class="col-md-8 col-12">
+    <div class="card w-100 mt-3">
+      <div class="card-header">
+        已撰寫 {{commentCount}} 則評論，評論過 {{restaurantCount}} 間餐廳
       </div>
-    </a>
-    {{/each}}
+      <div class="list-group">
+        {{#each profile.Comments}}
+        <a href="/restaurants/{{this.Restaurant.id}}" class="list-group-item list-group-item-action">
+          <div class="media">
+            <img src="{{this.Restaurant.image}}" class="align-self-start mr-3" alt="..." width="100em" height="100em">
+            <div class="media-body">
+                <p>{{this.text}}</p>
+                <small>{{this.Restaurant.name}} 餐廳 －{{moment this.createdAt}}</small>
+            </div>
+          </div>
+        </a>
+        {{/each}}
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4 col-12">
+    <div class="card w-100 mt-3">
+      <div class="card-header">
+        {{favoritedCount}} 家收藏餐廳
+      </div>
+      <div class="card-body">
+        {{#each profile.FavoritedRestaurants}}
+        <a href="/restaurants/{{this.id}}" class="d-inline-block m-1">
+          <div
+            style="background-image: url({{this.image}});border-radius: 50%; background-repeat: no-repeat;background-position: center;background-size: cover; width:3em; height:3em"
+            data-toggle="tooltip" data-placement="right" title="{{this.name}}">
+          </div>
+        </a>
+        {{/each}}
+      </div>
+    </div>
+    <div class="card w-100 mt-3">
+      <div class="card-header">
+        {{followerCount}} 位粉絲
+      </div>
+      <div class="card-body">
+        {{#each profile.Followers}}
+        <a href="/users/{{this.id}}" class="d-inline-block m-1">
+          <div
+            style="background-image: url({{this.image}});border-radius: 50%; background-repeat: no-repeat;background-position: center;background-size: cover; width:3em; height:3em"
+            data-toggle="tooltip" data-placement="right" title="{{this.name}}">
+          </div>
+        </a>
+        {{/each}}
+      </div>
+    </div>
+    <div class="card w-100 mt-3">
+      <div class="card-header">
+        {{followingCount}} 位追蹤對象
+      </div>
+      <div class="card-body">
+        {{#each profile.Followings}}
+        <a href="/users/{{this.id}}" class="d-inline-block m-1">
+          <div
+            style="background-image: url({{this.image}});border-radius: 50%; background-repeat: no-repeat;background-position: center;background-size: cover; width:3em; height:3em"
+            data-toggle="tooltip" data-placement="right" title="{{this.name}}">
+          </div>
+        </a>
+        {{/each}}
+      </div>
+    </div>
   </div>
 </div>
