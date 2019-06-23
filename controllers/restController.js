@@ -113,6 +113,29 @@ const restController = {
 
     return res.render('restDashboard', { restaurant, commentCount });
   },
+
+  getTopRestaurants: async (req, res) => {
+    const restData = await Restaurant.findAll({
+      include: [
+        { model: User, as: 'FavoritedUsers' },
+      ],
+    });
+
+    const restaurants = restData
+      .map(restaurant => ({
+        ...restaurant.dataValues,
+        FavoritedCount: restaurant.FavoritedUsers.length,
+        isFavorited: req.user.FavoritedRestaurants.map(d => d.id).includes(restaurant.id),
+      }))
+      .sort((a, b) => b.FavoritedCount - a.FavoritedCount)
+      .slice(0, 10)
+      .map((restaurant, index) => ({
+        ...restaurant,
+        rank: index + 1,
+      }));
+
+    return res.render('topRestaurants', { restaurants });
+  },
 };
 
 module.exports = restController;
