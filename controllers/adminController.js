@@ -1,15 +1,15 @@
 const imgur = require('imgur-node-api');
 const db = require('../models');
+const adminService = require('../services/adminService.js');
 
 const { Restaurant, User, Category } = db;
 const IMGUR_CLIENT_ID = 'cc4db0da4aafde9';
 
 const adminController = {
   getRestaurants: (req, res) => {
-    Restaurant.findAll({ include: [Category], order: [['id', 'ASC']] })
-      .then((restaurants) => {
-        res.render('admin/restaurants', { restaurants });
-      });
+    adminService.getRestaurants(req, res, (data) => {
+      res.render('admin/restaurants', data);
+    });
   },
 
   createRestaurant: async (req, res) => {
@@ -60,9 +60,9 @@ const adminController = {
   },
 
   getRestaurant: (req, res) => {
-    Restaurant
-      .findByPk(req.params.restaurantId, { include: [Category] })
-      .then(restaurant => res.render('restaurant', { restaurant }));
+    adminService.getRestaurant(req, res, (data) => {
+      res.render('admin/restaurant', data);
+    });
   },
 
   editRestaurant: async (req, res) => {

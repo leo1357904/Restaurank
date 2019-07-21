@@ -1,16 +1,18 @@
 const db = require('../models');
+const adminService = require('../services/adminService.js');
 
 const { Category } = db;
 
 const categoryController = {
   getCategories: async (req, res) => {
-    const categories = await Category.findAll();
     if (req.params.categoryId) {
-      const category = await Category.findByPk(req.params.categoryId);
-      return res.render('admin/categories', { categories, category });
+      return adminService.getCategory(req, res, (data) => {
+        res.json(data);
+      });
     }
-
-    return res.render('admin/categories', { categories });
+    return adminService.getCategories(req, res, (data) => {
+      res.json(data);
+    });
   },
 
   postCategory: async (req, res) => {
